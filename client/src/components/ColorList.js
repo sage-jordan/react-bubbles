@@ -13,17 +13,20 @@ const ColorList = ({ colors, updateColors }) => {
   const [colorToEdit, setColorToEdit] = useState(initialColor);
   const [add, setAdd] = useState(false);
 
+  const redirect = () => {
+    document.location.reload(true);
+  };
+
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
 
   const addColor = () => {
-    
-  };
-
-  const redirect = () => {
-    document.location.reload(true);
+    axiosWithAuth().post('http://localhost:5000/api/colors', colorToEdit)
+      .then(res => setColorToEdit(initialColor))
+      .catch(err => console.error("ERROR IN ADD COLOR AXIOS:", err))
+    redirect();
   };
 
   const saveEdit = e => {
@@ -95,7 +98,6 @@ const ColorList = ({ colors, updateColors }) => {
           </div>
         </form>
       )}
-      <div className="spacer" />
       {/* stretch - build another form here to add a color */}
         {add && (
           <form onSubmit={addColor}>
@@ -127,6 +129,7 @@ const ColorList = ({ colors, updateColors }) => {
               </div>
             </form>
           )}
+        <div className="spacer" />
         </div>
   );
 };
